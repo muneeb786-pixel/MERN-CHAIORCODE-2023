@@ -11,14 +11,15 @@ export class BlogService {
     this.database = new Databases(this.client)
  }
  
- async createBlog({title,slug,content,featureImage,status}){
+ async createBlog({title,slug,content,featuredImage,status,userId}){
   try {
-    return await this.database.createDocument(config.appwriteDatabaseId,config,appwriteCollectionId,slug,
+    return await this.database.createDocument(config.appwriteDatabaseId,config.appwriteCollectionId,slug,
     {
         title,
         content,
-        featureImage,
-        status
+        featuredImage,
+        status,
+        userId
     })
   } catch (error) {
     console.log('BLog service :: createBlog ::  error ', error);
@@ -26,12 +27,12 @@ export class BlogService {
   return null;
  }
 
- async updateBlog({title,slug,content,featureImage,status}){
+ async updateBlog(slug,{title,content,featuredImage,status}){
     try {
-        return await this.database.updateDocument(config.appwriteDatabaseId,config,appwriteCollectionId,slug,{
+        return await this.database.updateDocument(config.appwriteDatabaseId,config.appwriteCollectionId,slug,{
             title,
             content,
-            featureImage,
+            featuredImage,
             status
         })
     } catch (error) {
@@ -42,7 +43,7 @@ export class BlogService {
 
  async deleteBlog(slug){
     try {
-        return await this.database.deleteDocument(config.appwriteDatabaseId,config,appwriteCollectionId,slug)
+        return await this.database.deleteDocument(config.appwriteDatabaseId,config.appwriteCollectionId,slug)
     } catch (error) {
         console.log('blog service :: delete blog : error : ', error);
     }
@@ -50,7 +51,7 @@ export class BlogService {
  }
  async getPost(slug){
     try {
-        return await this.database.getDocument(config.appwriteDatabaseId,config,appwriteCollectionId,slug)
+        return await this.database.getDocument(config.appwriteDatabaseId,config.appwriteCollectionId,slug)
     } catch (error) {
         console.log('Blog service :: getpost ::  error',error);
     }
@@ -58,7 +59,7 @@ export class BlogService {
  }
  async getPosts(queries=[Query.equal('status','active')]){
     try {
-        return await this.database.listDocuments(config.appwriteDatabaseId,config,appwriteCollectionId,queries)
+        return await this.database.listDocuments(config.appwriteDatabaseId,config.appwriteCollectionId,queries)
     } catch (error) {
         console.log('Blog service :: getposts ::  error',error);
     }
